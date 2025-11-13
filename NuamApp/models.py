@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ValidationError #para los errores de validacion
+import re #expresiones regulares (para depurar la contraseña)
+
+SPECIAL_CHARS = r'[!@#$%^&*()_\-+=|\\/?\.,:;`~<>]'
 
 # Create your models here.
 class Cliente(models.Model):
@@ -64,6 +68,24 @@ class Corredor(models.Model):
     rut = models.CharField(max_length=12)
     email = models.EmailField(max_length=100)
     contraseña = models.CharField(max_length=128)
+    rol = models.CharField(max_length=50)
+    estado = models.BooleanField(default=False)
+
+    def clean(self): #para realizar la validacion
+        super().clean() #llama al metodo clean padre/raiz/principal
+
+        password = self.contraseña
+        if len(password) < 128: #con esto solo se valida si es texto no si es un cifrado
+            if len(password) < 8: #La contraseña debe tener minimo 8 caracteres como dice abajo
+                raise ValidationError({'contraseña': "La contraseña debe tener al menos 8 caracteres."})
+                #se llama al validation error con el nombre del campo para que se muestre el error más claro
+
+            if not re.search(r'[A-Z]', password): #La contraseña debe tener una letra mayuscula... como dice abajo
+                raise ValidationError({'contraseña': "La contraseña debe contener al menos una letra mayúscula."})
+            
+            if not re.search(SPECIAL_CHARS, password): #un caracter especial, como dice abajo
+                raise ValidationError({'contraseña': f"La contraseña debe contener al menos un caracter especial: {SPECIAL_CHARS}"})
+
 
     def save(self, *args, **kwargs):
         #maneja la encriptación de la contraseña
@@ -91,3 +113,33 @@ class Corredor(models.Model):
     
     def __str__(self):
         return f'{self.id_corredor} - {self.nombre}'
+    
+#calificación tributaria
+class Calificacion(models.Model):
+    id_calificacion = models.CharField(max_length=15, primary_key=True, editable=False)
+    año_tributario = models.IntegerField(null=True)
+    fecha_creacion_registro = models.DateTimeField(auto_now_add=True)
+    ultima_modificacion = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.id_calificacion:
+            last_qualification = Calificacion.objects.all().order_by('id_calificacion').last()
+
+            new_id_number = 1
+
+            if last_qualification:
+                last_id_str = last_qualification.id_calificacion[1:]
+
+                try:
+                    last_id_number = int(last_id_str)
+                    new_id_number = last_id_number + 1
+                except ValueError:
+                    return ('Error con el valor ID')
+                
+            self.id_calificacion = f'E{new_id_number}'
+
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f'{self.id_calificacion} - {self.nombre}'
+    
