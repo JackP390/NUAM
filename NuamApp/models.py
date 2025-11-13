@@ -107,7 +107,7 @@ class Corredor(models.Model):
                 except ValueError:
                     return ('Error con el valor ID')
                 
-            self.id_corredor = f'E{new_id_number}'
+            self.id_corredor = f'CO{new_id_number}'
 
         super().save(*args, **kwargs)
     
@@ -136,7 +136,7 @@ class Calificacion(models.Model):
                 except ValueError:
                     return ('Error con el valor ID')
                 
-            self.id_calificacion = f'E{new_id_number}'
+            self.id_calificacion = f'C{new_id_number}'
 
         super().save(*args, **kwargs)
     
@@ -164,7 +164,7 @@ class Detalle_c(models.Model):
                 except ValueError:
                     return ('Error con el valor ID')
                 
-            self.id_detalle = f'E{new_id_number}'
+            self.id_detalle = f'DC{new_id_number}'
 
         super().save(*args, **kwargs)
     
