@@ -143,3 +143,30 @@ class Calificacion(models.Model):
     def __str__(self):
         return f'{self.id_calificacion} - {self.nombre}'
     
+#detalle calificacion
+class Detalle_c(models.Model):
+    id_detalle = models.CharField(max_length=15, primary_key=True, editable=False)
+    tipo_dato = models.CharField(max_length=10)
+    valor_monto = models.FloatField(null=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.id_detalle:
+            last_detail = Detalle_c.objects.all().order_by('id_detalle').last()
+
+            new_id_number = 1
+
+            if last_detail:
+                last_id_str = last_detail.id_detalle[1:]
+
+                try:
+                    last_id_number = int(last_id_str)
+                    new_id_number = last_id_number + 1
+                except ValueError:
+                    return ('Error con el valor ID')
+                
+            self.id_detalle = f'E{new_id_number}'
+
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f'{self.id_detalle} - {self.nombre}'
