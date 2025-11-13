@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="login-card">
+        <img src="{% static 'images/Nuam_logo-transparente.png' %}" alt="Nuam logo blanco" id="logo">
+        <div id="linea"></div>
+        <h2>Iniciar Sesión</h2>
+        <input type="email" class="campo" alt="correo" placeholder="Correo Electrónico">
+        <input type="password" class="campo" alt="contraseña" placeholder="Contraseña">
+        <a href="{% url 'holder' %}" id="boton">Ingresar</a>
+        <p alt="más opciones"><a href="{% url 'register' %}">¿No tienes cuenta? ¡Registrate!</a></p>
+    </div>
+</body>
+</html>

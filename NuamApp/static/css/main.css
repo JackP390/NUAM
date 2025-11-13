@@ -1,0 +1,59 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    /* color de fondo del header */
+    background-color: rgba(255, 68, 3, 1);
+    /* posiciones de los "objetos" */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 160px;
+}
+
+#logo {
+    /* la imagen */
+    width: 150px;
+    margin-left: 50px;
+}
+
+a {
+    /* quita el efecto de link */
+    text-decoration: none;
+    color: inherit;
+}
+
+#login {
+    /* color del boton y su forma */
+    background-color: rgba(44, 44, 44, 1);
+    border-radius: 50px;
+    padding: 8px 25px;
+
+    /* Estilo del texto */
+    color: rgba(217, 217, 217, 1);
+    font-size: 16px;
+    font-weight: 550;
+    text-align: center;
+
+    /* posicionamiento */
+    margin-right: 50px;
+
+    /* volver el objeto 2D y no 3D (que se vea más simple) */
+    box-shadow: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+#login:hover {
+    background-color: rgba(60, 60, 60, 1);
+    transition: background-color 0.3s ease;
+}
+
+#login:focus {
+    background-color: rgba(60, 60, 60, 1);
+}

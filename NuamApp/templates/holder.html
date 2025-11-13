@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/holder.css' %}">
+</head>
+<header>
+    <img src="{% static 'images/nuam_logo-transparente.png' %}" id="logo">
+    <h1>Mantenedor de NUAM</h1>
+</header>
+<body>
+    <div>
+        <h1>Bienvenido {{nombre_e}}<!--nombre empleado--></h1>
+        <button>Añadir Cliente</button>
+        <p>Buscar: </p>
+        <input type="search" class="busqueda">
+        <div>
+            <table class="info">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>RUT</th>
+                        <th>Dirección</th>
+                        <th>Email</th>
+                        <th>Telefono</th>
+                        <th>Corredor</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ID}}</td>
+                        <td>{{Nombre}}</td>
+                        <td>{{RUT}}</td>
+                        <td>{{Dirección}}</td>
+                        <td>{{Email}}</td>
+                        <td>{{Telefono}}</td>
+                        <td>{{Corredor}}</td>
+                        <td>{{Acciones}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

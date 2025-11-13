@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nuam un mercado único que conectan tres economías | nuam</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<header>
+    <!--Aqui se almacena el logo de NUAM y el botón para iniciar sesión-->
+    <img src="{% static 'images/nuam_logo-naranja.png' %}" alt="Logo de Nuam" id="logo">
+    <button id="login">
+        <!--Utiliza django para cambiar de página a la de Login-->
+        <a href="{% url 'login' %}">Iniciar Sesión</a>
+    </button>
+</header>
+<body>
+    <!--Representación de la página principal-->
+    <h1>Página principal de NUAM</h1>
+    
+
+</body>
+</html>
