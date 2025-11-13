@@ -1,9 +1,5 @@
 from django.contrib import admin
-from .models import Cliente
-from .models import Emisor
-from .models import Corredor
-from .models import Calificacion
-from .models import Detalle_c
+from .models import Cliente, Emisor, Corredor, Calificacion, Detalle_c
 
 # Register your models here.
 admin.site.register(Cliente)

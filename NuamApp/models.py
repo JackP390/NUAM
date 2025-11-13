@@ -65,6 +65,7 @@ class Emisor(models.Model):
 
 class Corredor(models.Model):
     id_corredor = models.CharField(max_length=15, primary_key=True, editable=False)
+    nombre = models.CharField(max_length=100)
     rut = models.CharField(max_length=12)
     email = models.EmailField(max_length=100)
     contraseña = models.CharField(max_length=128)
@@ -120,6 +121,7 @@ class Calificacion(models.Model):
     año_tributario = models.IntegerField(null=True)
     fecha_creacion_registro = models.DateTimeField(auto_now_add=True)
     ultima_modificacion = models.DateTimeField(auto_now=True)
+    #campos que estan en el E-R: [ID_Cliente, ID_Emisor]
 
     def save(self, *args, **kwargs):
         if not self.id_calificacion:
@@ -148,6 +150,8 @@ class Detalle_c(models.Model):
     id_detalle = models.CharField(max_length=15, primary_key=True, editable=False)
     tipo_dato = models.CharField(max_length=10)
     valor_monto = models.FloatField(null=True)
+    valor_factor = models.FloatField(null=True)
+    # campos que estan en el E-R: [ID_Calificacion, ID_Corredor, Emisor, fecha_creacion_registro]
     
     def save(self, *args, **kwargs):
         if not self.id_detalle:
