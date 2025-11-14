@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ titulo }}</title>
-    <link rel="stylesheet" href="{% static 'css/create_client.css' %}">
+    <link rel="stylesheet" href="{% static 'css/form_client.css' %}">
 </head>
 <body>
     <div class="register-card">
@@ -13,7 +13,7 @@
         <div id="linea"></div>
         <h2>{{ titulo }}</h2>
 
-        <form method="POST" action="{% url action_url %}">
+        <form method="POST" action="{{ action }}">
             {% csrf_token %}
 
             {{ form.non_field_errors }}

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mantenedor de NUAM</title>
     <link rel="stylesheet" href="{% static 'css/holder.css' %}">
 </head>
 <header>
@@ -14,7 +14,7 @@
 <body>
     <div>
         <h1>Bienvenido {{nombre_e}}<!--nombre empleado--></h1>
-        <a href="{% url 'create_client' %}" id="boton">Añadir Cliente</a>
+        <a href="{% url 'create_client'  %}" id="boton">Añadir Cliente</a>
         <p>Buscar: </p>
         <input type="search" class="busqueda">
         <div>
@@ -32,16 +32,30 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for cliente in clientes %}
                     <tr>
-                        <td>{{ID}}</td>
-                        <td>{{Nombre}}</td>
-                        <td>{{RUT}}</td>
-                        <td>{{Dirección}}</td>
-                        <td>{{Email}}</td>
-                        <td>{{Telefono}}</td>
-                        <td>{{Corredor}}</td>
-                        <td><a>Visualizar</a> <a>Modificar</a> <a>Eliminar</a></td>
+                        <td>{{ cliente.id }}</td>
+                        <td>{{ cliente.nombre }}</td>
+                        <td>{{ cliente.rut }}</td>
+                        <td>{{ cliente.direccion }}</td>
+                        <td>{{ cliente.email }}</td>
+                        <td>{{ cliente.telefono }}</td>
+                        <td>{{ cliente.corredor.nombre }}</td>
+                        <td>
+                            <a href="#">Visualizar</a>
+                            <a href="{% url 'modify_client' cliente_id=cliente.id %}">Modificar</a>
+                            
+                            <form method="POST" action="{% url 'delete_client' cliente_id=cliente.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8">No hay clientes asociados a este corredor.</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

@@ -1,5 +1,7 @@
-from django.shortcuts import render, redirect # redirect para enviar a otras páginas
+from django.shortcuts import render, redirect, get_object_or_404 # redirect para enviar a otras páginas y get object para obtener objetos
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.urls import reverse
 from .models import Cliente, Emisor, Corredor, Calificacion, Detalle_c
 from .forms import FormCliente, FormEmisor, FormCorredor, FormCalificacion, FormDetalle_c
 
@@ -43,7 +45,7 @@ def create_client(request):
         if form.is_valid():
             cliente = form.save(commit=False) # Guarda el objeto cliente temporalmente
 
-            cliente.id_corredor = request.user
+            cliente.corredor = request.user
 
             cliente.save()
 
@@ -51,5 +53,42 @@ def create_client(request):
     else:
         form = FormCliente()
 
-    context = {'form':form, 'titulo':'Añadir Nuevo Cliente', 'action_url':'create_client'}
-    return render(request, 'create_client.html', context)
+    context = {
+        'form':form,
+        'titulo':'Añadir Nuevo Cliente',
+        'action':reverse('create_client')
+        }
+    return render(request, 'form_client.html', context)
+
+@login_required
+def modify_client(request, cliente_id):
+    try:
+        cliente = Cliente.objects.get(pk=cliente_id, corredor = request.user)
+    except Cliente.DoesNotExist:
+        return render(request, '404.html', status=404)
+    
+    if request.method == 'POST':
+        form = FormCliente(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('holder')
+        
+    else:
+        form = FormCliente(instance=cliente)
+
+    context = {
+        'form':form,
+        'titulo':'Modificar Cliente',
+        'action':reverse('modify_client', kwargs={'cliente_id':cliente_id})
+    }
+    
+    return render(request, 'form_client.html', context)
+
+@require_POST
+@login_required
+def delete_client(request, cliente_id):
+    cliente = get_object_or_404(Cliente, pk=cliente_id, corredor=request.user) # se asegura que el cliente sea del corredor logeado
+
+    cliente.delete()
+
+    return redirect('holder')
