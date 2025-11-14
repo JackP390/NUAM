@@ -14,7 +14,7 @@
 <body>
     <div>
         <h1>Bienvenido {{nombre_e}}<!--nombre empleado--></h1>
-        <button>Añadir Cliente</button>
+        <a href="{% url 'create_client' %}" id="boton">Añadir Cliente</a>
         <p>Buscar: </p>
         <input type="search" class="busqueda">
         <div>
