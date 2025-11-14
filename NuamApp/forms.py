@@ -7,16 +7,16 @@ from .models import Cliente, Emisor, Corredor, Calificacion, Detalle_c
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].label = get_user_model().EMAIL_FIELD
+        self.fields['username'].label = get_user_model().USERNAME_FIELD
 
     username = forms.CharField(
         label="Correo Electrónico",
-        widget=forms.TextInput(attrs={'class': 'campo', 'placeholder': 'Correo Electrónico'})
+        widget=forms.TextInput(attrs={'class': 'campo', 'placeholder': 'Correo Electrónico', 'required': 'required'})
     )
 
     password = forms.CharField(
         label="Contraseña",
-        widget=forms.PasswordInput(attrs={'class': 'campo', 'placeholder': 'Contraseña'})
+        widget=forms.PasswordInput(attrs={'class': 'campo', 'placeholder': 'Contraseña', 'required': 'required'})
     )
 
 class FormCliente(ModelForm):
