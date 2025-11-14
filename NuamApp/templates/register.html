@@ -12,11 +12,27 @@
         <img src="{% static 'images/Nuam_logo-transparente.png' %}" alt="Nuam logo blanco" id="logo">
         <div id="linea"></div>
         <h2>Registro en NUAM</h2>
-        <input type="text" class="campo" alt="nombre" placeholder="Nombre completo">
-        <input type="email" class="campo" alt="correo" placeholder="Correo Electrónico">
-        <input type="password" class="campo" alt="contraseña" placeholder="Contraseña">
-        <input type="password" class="campo" alt="Rcontraseña" placeholder="Repetir Contraseña">
-        <a href="{% url 'holder' %}" id="boton">Registrate</a>
+        <form action="{% url 'register' %}" method="POST">
+            {% csrf_token %}
+            {{ form.non_field_errors }} <!--controlar los errores-->
+
+            {{ form.nombre.errors }}
+            <input type="text" class="campo" name="{{ form.nombre.name }}" value="{{ form.nombre.value|default_if_none:""}}" placeholder="Nombre completo">
+
+            {{ form.email.errors }}
+            <input type="email" class="campo" name="{{ form.email.name }}" value="{{ form.email.value|default_if_none:"" }}" placeholder="Correo Electrónico">
+
+            {{ form.rut.errors }}
+            <input type="text" class="campo" name="{{ form.rut.name }}" value="{{ form.rut.value|default_if_none:"" }}" placeholder="RUT">
+
+            {{ form.password.errors }}
+            <input type="password" class="campo" name="{{ form.password.name }}" placeholder="Contraseña">
+
+            {{ form.password2.errors }}
+            <input type="password" class="campo" name="{{ form.password2.name }}" placeholder="Repetir Contraseña">
+
+            <button type="submit" id="boton">Registrate</button>
+        </form>
         <p alt="más opciones"><a href="{% url 'login' %}">¿Ya tienes cuenta? Inicia Sesión</a></p>
     </div>
 </body>

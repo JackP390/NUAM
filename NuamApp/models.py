@@ -61,6 +61,25 @@ class Corredor(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True) # is_active es el campo estado, el AbstractBaseUser lo pide obligatoriamente con ese nombre
     is_staff = models.BooleanField(default=False)
 
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name=('groups'),
+        blank=True,
+        help_text=('Los grupos a los que pertenece este usuario. Un usuario tendra todos los permisos '
+                   'otorgado para cada uno de los grupos.'
+        ),
+        related_name="corredor_set", # Si no se agrega este "apodo" el codigo colisiona
+        related_query_name="corredor",
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name=('user_permissions'),
+        blank=True,
+        help_text=('Especifica permisos para esté usuario.',),
+        related_name="corredor_permissions_set",
+        related_query_name="corredor",
+    )
+
     objects = CustomCorredorManager()
 
     def clean(self): #para realizar la validacion
