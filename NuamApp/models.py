@@ -12,6 +12,7 @@ class Cliente(models.Model):
     direccion = models.CharField(max_length=150)
     email = models.EmailField(max_length=100)
     telefono = models.CharField(max_length=13)
+    corredor = models.ForeignKey('Corredor', on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.id} - {self.nombre}'

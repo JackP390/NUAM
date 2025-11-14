@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link rel="stylesheet" href="{% static 'css/create_client.css' %}">
+</head>
+<body>
+    <div class="register-card">
+        <img src="{% static 'images/nuam_logo-transparente.png' %}" alt="Nuam logo blanco" id="logo">
+        <div id="linea"></div>
+        <h2>{{ titulo }}</h2>
+
+        <form method="POST" action="{% url action_url %}">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            {% for field in form %}
+            <div class="form-field">
+                {{ field.errors }}
+                <input type="{{ field.field.widget.input_type }}" class="campo" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}" placeholder="{{ field.label }}">
+            </div>
+            {% endfor %}
+
+            <button type="submit" id="boton">Guardar Cliente</button>
+        </form>
+        <p><a href="{% url 'holder' %}">Volver al Mantenedor</a></p>
+    </div>
+</body>
+</html>

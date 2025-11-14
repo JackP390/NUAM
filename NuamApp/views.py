@@ -29,9 +29,27 @@ def register(request):
 def holder(request):
     corredor_actual = request.user # si el corredor esta en el request user
 
-    clientes_asociados = Cliente.objects.filter(id_corredor=corredor_actual).order_by('nombre')
+    clientes_asociados = Cliente.objects.filter(corredor=corredor_actual).order_by('nombre')
     context = {
         'nombre_e':corredor_actual.nombre, # nombre empleado logeado
         'clientes':clientes_asociados,
         }
     return render(request, 'holder.html', context)
+
+@login_required
+def create_client(request):
+    if request.method == 'POST':
+        form = FormCliente(request.POST)
+        if form.is_valid():
+            cliente = form.save(commit=False) # Guarda el objeto cliente temporalmente
+
+            cliente.id_corredor = request.user
+
+            cliente.save()
+
+            return redirect('holder')
+    else:
+        form = FormCliente()
+
+    context = {'form':form, 'titulo':'Añadir Nuevo Cliente', 'action_url':'create_client'}
+    return render(request, 'create_client.html', context)

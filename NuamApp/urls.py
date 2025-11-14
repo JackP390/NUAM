@@ -11,5 +11,6 @@ urlpatterns = [
         next_page = 'holder'
     ), name = "login"),
     path('register/', views.register, name = "register"),
-    path('holder/', views.holder, name = "holder")
+    path('holder/', views.holder, name = "holder"),
+    path('client/create/', views.create_client, name='create_client'),
 ]
