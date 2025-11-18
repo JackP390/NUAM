@@ -2,7 +2,11 @@ from django import forms
 from django.forms import ModelForm, PasswordInput
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.exceptions import ValidationError #para los errores de validacion
 from .models import Cliente, Emisor, Corredor, Calificacion, Detalle_c
+import re # Expresiones regulares, para depurar la contraseña
+
+SPECIAL_CHARS = r'[!@#$%^&*()_\-+=|\\/?\.,:;`~<>]'
 
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -30,10 +34,40 @@ class FormEmisor(ModelForm):
         fields = ['rut', 'nombre', 'estado']
 
 class FormCorredor(ModelForm):
+    password = forms.CharField(
+        label="Contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'campo', 'placeholder': 'Contraseña'}),
+        help_text="Mínimo 8 caracteres, 1 mayúscula y un caracter especial."
+    )
+
+    password2 = forms.CharField(
+        label="Repetir Contraseña",
+        widget= forms.PasswordInput(attrs={'class':'campo', 'placeholder':'Repetir Contraseña'}),
+        help_text="Repita la contraseña para confirmar."
+    )
     class Meta:
         model = Corredor
-        fields = ['nombre', 'rut', 'email', 'password']
-        widgets = {'password':PasswordInput(),} # Oculta la contraseña al escribirla
+        fields = ['nombre', 'rut', 'email']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        password2 = cleaned_data.get("password2")
+
+        if password and password2 and password != password2:
+            self.add_error('password2', "Las contraseñas no coinciden.")
+
+        if password:
+            if len(password) < 8:
+                self.add_error('password', "La contraseña debe tener al menos 8 caracteres.")
+
+            if not re.search(r'[A-Z]', password):
+                self.add_error('password', "La contraseña debe contener al menos una letra mayúscula.")
+
+            if not re.search(SPECIAL_CHARS, password):
+                self.add_error('password', f"La contraseña debe contener al menos un caracter especial: {SPECIAL_CHARS}")
+
+        return cleaned_data
 
 class FormCalificacion(ModelForm):
     class Meta:

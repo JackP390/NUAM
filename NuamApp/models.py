@@ -1,9 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from django.core.exceptions import ValidationError #para los errores de validacion
-import re # Expresiones regulares, para depurar la contraseña
-
-SPECIAL_CHARS = r'[!@#$%^&*()_\-+=|\\/?\.,:;`~<>]'
 
 # Create your models here.
 class Cliente(models.Model):
@@ -83,21 +79,6 @@ class Corredor(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomCorredorManager()
 
-    def clean(self): #para realizar la validacion
-        super().clean() #llama al metodo clean padre/raiz/principal
-
-        password = self.password
-        if len(password) < 128: #con esto solo se valida si es texto no si es un cifrado
-            if len(password) < 8: #La contraseña debe tener minimo 8 caracteres como dice abajo
-                raise ValidationError({'password': "La contraseña debe tener al menos 8 caracteres."})
-                #se llama al validation error con el nombre del campo para que se muestre el error más claro
-
-            if not re.search(r'[A-Z]', password): #La contraseña debe tener una letra mayuscula... como dice abajo
-                raise ValidationError({'password': "La contraseña debe contener al menos una letra mayúscula."})
-            
-            if not re.search(SPECIAL_CHARS, password): #un caracter especial, como dice abajo
-                raise ValidationError({'password': f"La contraseña debe contener al menos un caracter especial: {SPECIAL_CHARS}"})
-    
     def __str__(self):
         return f'{self.email}'
     

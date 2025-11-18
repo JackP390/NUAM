@@ -13,15 +13,23 @@ def register(request):
     if request.method == 'POST':
         form = FormCorredor(request.POST)
         if form.is_valid():
-            password = form.cleaned_data.pop('password')
-            form.cleaned_data.pop('password2')
+            email = form.cleaned_data.get('email')
+            nombre = form.cleaned_data.get('nombre')
+            rut = form.cleaned_data.get('rut')
+            password = form.cleaned_data.get('password')
 
-            form.cleaned_data['rol'] = 'Corredor' # Se le asigna un valor por defecto
+            try:
+                Corredor.objects.create_user(
+                    email=email,
+                    nombre=nombre,
+                    rut=rut,
+                    password=password,
+                    rol = 'Corredor'
+                )
+            except Exception as e:
+                form.add_error(None, f'Error al crear usuario: {e}')
+                return render(request, 'register.html', {'form':form})
 
-            Corredor.objects.create_user(
-                password = password,
-                **form.cleaned_data
-            )
             return redirect('login')
     else:
             form = FormCorredor()
