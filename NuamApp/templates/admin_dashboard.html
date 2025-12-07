@@ -53,7 +53,7 @@
                     </td>
                     <td>
                         {% if c.email != request.user.email %}
-                            <a href="{% url 'toggle_status' c.id %}" class="btn-toggle">
+                            <a href="{% url 'toggle_status_corredor' c.id %}" class="btn-toggle">
                                 {% if c.is_active %}Desactivar{% else %}Activar{% endif %}
                             </a>
                         {% else %}
