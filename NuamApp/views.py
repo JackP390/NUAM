@@ -51,7 +51,7 @@ def redireccion_login(request):
         return redirect('holder')
 
 @user_passes_test(es_admin)
-def carga_masiva_clasificaciones(request):
+def carga_masiva_calificaciones(request):
     if request.method == 'POST':
         archivo = request.FILES.get('archivo_csv')
 
