@@ -37,11 +37,6 @@ class FormEmisor(ModelForm):
             'nombre': TextInput(attrs={'class':'campo', 'placeholder':'Razón Social'}),# nombre oficial y legal de la empresa
         }
 
-class FormEmisor(ModelForm):
-    class Meta:
-        model = Emisor
-        fields = ['rut', 'nombre', 'estado']
-
 class FormCorredor(ModelForm):
     password = forms.CharField(
         label="Contraseña",

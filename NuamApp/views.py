@@ -86,7 +86,7 @@ def carga_masiva_clasificaciones(request):
         except Exception as e:
             messages.error(request, f"Error crítico procesando archivo: {e}")
     
-    return redirect('admin dashboard')
+    return redirect('admin_dashboard')
 
 @user_passes_test(es_admin, login_url='login')
 def admin_dashboard(request):
