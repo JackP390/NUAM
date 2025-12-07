@@ -55,7 +55,7 @@ class Corredor(AbstractBaseUser, PermissionsMixin):
     rut = models.CharField(max_length=12, unique=True)
     email = models.EmailField(max_length=100, unique=True)
     rol = models.CharField(max_length=50)
-    is_active = models.BooleanField(default=True) # is_active es el campo estado, el AbstractBaseUser lo pide obligatoriamente con ese nombre
+    is_active = models.BooleanField(default=False) # is_active es el campo estado, el AbstractBaseUser lo pide obligatoriamente con ese nombre
     is_staff = models.BooleanField(default=False)
 
     groups = models.ManyToManyField(

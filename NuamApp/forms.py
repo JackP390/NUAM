@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, PasswordInput
+from django.forms import ModelForm, PasswordInput, TextInput, CheckboxInput
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError #para los errores de validacion
@@ -27,6 +27,15 @@ class FormCliente(ModelForm):
     class Meta:
         model = Cliente
         fields = ['nombre', 'rut', 'direccion', 'email', 'telefono']
+
+class FormEmisor(ModelForm):
+    class Meta:
+        model = Emisor  
+        fields = ['rut', 'nombre', 'estado']
+        widgets = {
+            'rut': TextInput(attrs={'class':'campo', 'placeholder':'RUT del Emisor'}),
+            'nombre': TextInput(attrs={'class':'campo', 'placeholder':'Razón Social'}),# nombre oficial y legal de la empresa
+        }
 
 class FormEmisor(ModelForm):
     class Meta:
