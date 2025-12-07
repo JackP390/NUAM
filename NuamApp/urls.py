@@ -8,8 +8,8 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(
         template_name = 'login.html',
         authentication_form = LoginForm,
-        next_page = 'holder'
     ), name = "login"),
+    path('home-redirect/', views.redireccion_login, name = 'redireccion_login'),
     path('register/', views.register, name = "register"),
     path('holder/', views.holder, name = "holder"),
     path('client/create/', views.create_client, name='create_client'),

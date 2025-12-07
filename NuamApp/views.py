@@ -43,6 +43,13 @@ def es_admin(user): # verificación de que el usuario es superuser/admin
 
 @login_required
 
+@login_required
+def redireccion_login(request):
+    if request.user.is_superuser:
+        return redirect('admin_dashboard')
+    else:
+        return redirect('holder')
+
 @user_passes_test(es_admin)
 def carga_masiva_clasificaciones(request):
     if request.method == 'POST':
