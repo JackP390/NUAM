@@ -4,30 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ titulo }}</title>
+    <title>{{ titulo }} | NUAM</title>
     <link rel="stylesheet" href="{% static 'css/form_client.css' %}">
 </head>
 <body>
-    <div class="register-card">
-        <img src="{% static 'images/nuam_logo-transparente.png' %}" alt="Nuam logo blanco" id="logo">
-        <div id="linea"></div>
+
+    <div class="form-container">
+        <img src="{% static 'images/Nuam_logo-naranja.png' %}" alt="Nuam Logo" id="logo">
+        
         <h2>{{ titulo }}</h2>
+        <p class="subtitle">Complete los datos para registrar un cliente</p>
 
         <form method="POST" action="{{ action }}">
             {% csrf_token %}
 
-            {{ form.non_field_errors }}
+            {% if form.non_field_errors %}
+                <div class="errorlist">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
             {% for field in form %}
-            <div class="form-field">
-                {{ field.errors }}
-                <input type="{{ field.field.widget.input_type }}" class="campo" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}" placeholder="{{ field.label }}">
+            <div class="form-group">
+                {{ field }} {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>• {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
             {% endfor %}
 
             <button type="submit" id="boton">Guardar Cliente</button>
         </form>
-        <p><a href="{% url 'holder' %}">Volver al Mantenedor</a></p>
+
+        <a href="{% url 'holder' %}" class="back-link">
+            ← Volver al Mantenedor
+        </a>
     </div>
+
 </body>
 </html>

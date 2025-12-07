@@ -1,0 +1,114 @@
+/* NuamApp/static/css/form_client.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f8; /* Mismo gris del dashboard */
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    background-color: white;
+    width: 400px;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Sombra elegante */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#logo {
+    width: 180px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #051e34; /* Azul oscuro corporativo */
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    text-align: center;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espacio entre inputs */
+}
+
+/* Estilo para los inputs (Clase .campo que pusimos en forms.py) */
+.campo, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box; /* Para que el padding no rompa el ancho */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fafafa;
+}
+
+.campo:focus {
+    outline: none;
+    border-color: #ff4403; /* Naranja Nuam al seleccionar */
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(255, 68, 3, 0.1);
+}
+
+/* Etiquetas de errores de Django */
+.errorlist {
+    color: #d32f2f;
+    font-size: 12px;
+    margin: 0;
+    padding-left: 0;
+    list-style: none;
+    text-align: left;
+}
+
+/* Botón Principal */
+#boton {
+    margin-top: 10px;
+    width: 100%;
+    padding: 14px;
+    background-color: #ff4403; /* Naranja Nuam */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#boton:hover {
+    background-color: #e03b00; /* Naranja un poco más oscuro */
+}
+
+/* Enlace de volver */
+.back-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #051e34;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #ff4403;
+    text-decoration: underline;
+}

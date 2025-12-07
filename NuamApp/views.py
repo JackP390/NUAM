@@ -99,10 +99,12 @@ def carga_masiva_calificaciones(request):
 def admin_dashboard(request):
     corredores = Corredor.objects.all().order_by('id')
     emisores = Emisor.objects.all().order_by('nombre')
+    clientes = Cliente.objects.all().select_related('corredor').order_by('nombre')
 
     context = {
         'corredores':corredores,
         'emisores':emisores,
+        'clientes':clientes,
         'form_emisor':FormEmisor()
     }
     return render(request, 'admin_dashboard.html', context)

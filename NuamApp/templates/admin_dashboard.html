@@ -21,6 +21,9 @@
             <li class="nav-item" onclick="showSection('emisores', this)">
                 <span>🏢 Emisores</span>
             </li>
+            <li class="nav-item" onclick="showSection('clientes_global', this)">
+                <span>👥 Clientes Globales</span>
+            </li>
             <li class="nav-item" onclick="showSection('calificaciones', this)">
                 <span>📊 Calificaciones</span>
             </li>
@@ -116,6 +119,39 @@
                                 </span>
                             </td>
                         </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="clientes_global" class="section-container">
+            <div class="card">
+                <h2>Listado Global de Clientes</h2>
+                <p>Visualización de todos los clientes registrados por los corredores.</p>
+                <table class="info">
+                    <thead>
+                        <tr>
+                            <th>RUT</th>
+                            <th>Nombre</th>
+                            <th>Corredor Asignado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cl in clientes %}
+                        <tr>
+                            <td>{{ cl.rut }}</td>
+                            <td>{{ cl.nombre }}</td>
+                            <td>{{ cl.corredor.nombre }}</td> <td>
+                                <form method="POST" action="{% url 'delete_any_client' cl.id %}" onsubmit="return confirm('¿Seguro que desea eliminar este cliente?');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-toggle" style="background:#ffcccc; color:red; border:none; cursor:pointer;">Eliminar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="4">No hay clientes registrados.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
