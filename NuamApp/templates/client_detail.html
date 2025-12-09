@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle Cliente | NUAM</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    </head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="{% static 'images/Nuam_logo-transparente.png' %}" alt="Nuam Logo" class="sidebar-logo">
+            <p style="margin-top:10px; font-size: 0.9em; color: #ccc;">Panel de Corredor</p>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item">
+                <a href="{% url 'holder' %}" style="text-decoration:none; color:inherit; display:block; width:100%;">
+                    <span>← Volver a la Cartera</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        
+        {% if messages %}
+        <div style="margin-bottom: 20px;">
+            {% for message in messages %}
+                <div style="padding: 15px; background: #fff; border-left: 5px solid #ff4403; border-radius: 4px;">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px;">
+            
+            <div class="card">
+                <h2>👤 Ficha del Cliente</h2>
+                <div style="margin-top: 20px;">
+                    <p><strong>Nombre:</strong><br> {{ cliente.nombre }}</p>
+                    <p><strong>RUT:</strong><br> {{ cliente.rut }}</p>
+                    <p><strong>Email:</strong><br> <a href="mailto:{{ cliente.email }}" style="color:#ff4403;">{{ cliente.email }}</a></p>
+                    <p><strong>Teléfono:</strong><br> {{ cliente.telefono }}</p>
+                    <p><strong>Dirección:</strong><br> {{ cliente.direccion }}</p>
+                </div>
+                <div style="margin-top: 30px; text-align: center;">
+                    <a href="{% url 'modify_client' cliente.id %}" class="btn-toggle" style="background:#e3f2fd; color:#0d47a1; padding: 10px 20px; font-size: 14px;">✏️ Editar Datos</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Calificaciones Asociadas</h2>
+                
+                <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #eee;">
+                    <h3 style="margin-top:0; font-size: 16px; color:#555;">Asociar Nueva Calificación</h3>
+                    <form action="{% url 'add_calificacion' cliente.id %}" method="POST" style="display: flex; gap: 10px; align-items: end;">
+                        {% csrf_token %}
+                        <div style="flex-grow: 1;">
+                            <label style="font-size: 12px; color:#777;">Emisor</label>
+                            {{ form.id_emisor }}
+                        </div>
+                        <div style="width: 100px;">
+                            <label style="font-size: 12px; color:#777;">Año</label>
+                            {{ form.año_tributario }}
+                        </div>
+                        <button type="submit" id="boton" style="margin:0; width: auto; padding: 10px 15px;">Asociar</button>
+                    </form>
+                </div>
+
+                <table class="info">
+                    <thead>
+                        <tr>
+                            <th>Emisor</th>
+                            <th>Año Tributario</th>
+                            <th>Fecha Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for calif in calificaciones %}
+                        <tr>
+                            <td>
+                                <strong>{{ calif.id_emisor.nombre }}</strong><br>
+                                <small style="color:#888;">RUT: {{ calif.id_emisor.rut }}</small>
+                            </td>
+                            <td>
+                                <span style="background: #e8f5e9; color: #2e7d32; padding: 3px 8px; border-radius: 10px; font-size: 12px; font-weight: bold;">
+                                    {{ calif.año_tributario }}
+                                </span>
+                            </td>
+                            <td style="color:#666; font-size: 14px;">
+                                {{ calif.fecha_creacion_registro|date:"d/m/Y" }}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" style="text-align:center; padding: 30px; color: #999;">
+                                Este cliente no tiene calificaciones asociadas.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+</body>
+</html>

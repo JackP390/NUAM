@@ -59,11 +59,13 @@
                             <td>{{ cliente.email }}</td>
                             <td>{{ cliente.telefono }}</td>
                             <td>
+                                <a href="{% url 'client_detail' cliente.id %}" class="btn-toggle" style="background:#fff3e0; color:#ef6c00; margin-right: 5px;">Visualizar</a>
+
                                 <a href="{% url 'modify_client' cliente.id %}" class="btn-toggle" style="background:#e3f2fd; color:#0d47a1;">Editar</a>
                                 
                                 <form method="POST" action="{% url 'delete_client' cliente.id %}" style="display:inline;" onsubmit="return confirm('¿Borrar cliente?');">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn-toggle" style="background:none; color:red; border:none; cursor:pointer; text-decoration:underline;">Eliminar</button>
+                                    <button type="submit" class="btn-toggle" style="background: #ffebee; color: #c62828; border: none; cursor: pointer;">Eliminar</button>
                                 </form>
                             </td>
                         </tr>

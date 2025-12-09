@@ -27,6 +27,13 @@ class FormCliente(ModelForm):
     class Meta:
         model = Cliente
         fields = ['nombre', 'rut', 'direccion', 'email', 'telefono']
+        widgets = {
+            'nombre' : forms.TextInput(attrs = {'class':'campo', 'placeholder':'Nombre Completo o Razón Social'}),
+            'rut' : forms.TextInput(attrs = {'class':'campo', 'placeholder':'RUT(ej:12.345.678-9)'}),
+            'direccion' : forms.TextInput(attrs = {'class':'campo', 'placeholder':'Direccion Comercial'}),
+            'email' : forms.EmailInput(attrs = {'class':'campo', 'placeholder':'Correo Electrónico'}),
+            'telefono' : forms.TextInput(attrs = {'class':'campo', 'placeholder':'Teléfono de Contacto'}),
+        }
 
 class FormEmisor(ModelForm):
     class Meta:
@@ -76,7 +83,15 @@ class FormCorredor(ModelForm):
 class FormCalificacion(ModelForm):
     class Meta:
         model = Calificacion
-        fields = ['año_tributario']
+        fields = ['id_emisor', 'año_tributario']
+        wigets = {
+            'id_emisor' : forms.Select(attrs={'class':'campo'}),
+            'año_tributario' : forms.NumberInput(attrs={'class':'campo','placeholder':'Año (Ej: 2025)'}),
+        }
+        labels = {
+            'id_emisor':'Seleccione un Emisor',
+            'año_tributario':'Año Tributario'
+        }
 
 class FormDetalle_c(ModelForm):
     class Meta:

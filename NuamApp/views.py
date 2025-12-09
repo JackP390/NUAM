@@ -206,3 +206,35 @@ def delete_client(request, cliente_id):
     cliente.delete()
 
     return redirect('holder')
+
+@login_required
+def client_detail(request, cliente_id):
+    cliente = get_object_or_404(Cliente, pk=cliente_id, corredor=request.user)
+
+    calificaciones = Calificacion.objects.filter(id_cliente=cliente).order_by('-año_tributario')
+
+    form = FormCalificacion()
+
+    context = {
+        'cliente':cliente,
+        'calificaciones':calificaciones,
+        'form':form
+    }
+    
+    return render(request, 'client_detail.html', context)
+
+@login_required
+def add_calificacion(request, cliente_id):
+    cliente = get_object_or_404(Cliente, pk=cliente_id, corredor= request.user)
+
+    if request.method == 'POST':
+        form = FormCalificacion(request.POST)
+        if form.is_valid():
+            nueva_calif = form.save(commit=False)
+            nueva_calif.id_cliente = cliente
+            nueva_calif.save()
+            messages.succes(request, "Calificación asociada correctamente.")
+        else:
+            messages.error(request, "Error al asociar calificación.")
+
+    return redirect('client_detail', cliente_id=cliente_id)
