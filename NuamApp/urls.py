@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin-panel/carga-masiva/', views.carga_masiva_calificaciones, name = 'carga_masiva'),
     path('admin-panel/crear-emisor/', views.create_emisor, name = 'create_emisor'),
     path('admin-panel/toggle-usuario/<int:user_id>/', views.toggle_status_corredor, name = 'toggle_status_corredor'),
-    path('admin-panel/delete-client-global/<int:cliente_id>/', views.delete_any_client, name = 'delete_any_client')
-]
+    path('admin-panel/delete-client-global/<int:cliente_id>/', views.delete_any_client, name = 'delete_any_client'),
+    path('redireccion-inicio/', views.redireccion_login, name="redireccion_login"),
+    path('mi-portal/', views.client_view, name="client_view"),
+    ]

@@ -126,3 +126,9 @@ AUTH_USER_MODEL = 'NuamApp.Corredor'
 
 LOGIN_REDIRECT_URL = 'redireccion_login'
 LOGOUT_REDIRECT_URL = 'login'
+
+# Configuración de Correo para DESARROLLO (Modo "Simulado")
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = 'no-reply@nuam.cl'
+
+LOGIN_REDIRECT_URL = 'redireccion_login'

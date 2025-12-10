@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Portal | NUAM</title>
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <img src="{% static 'images/Nuam_logo-transparente.png' %}" alt="Nuam Logo" class="sidebar-logo">
+            <p style="margin-top:10px; font-size: 0.9em; color: #ccc;">Portal Cliente</p>
+        </div>
+        
+        <ul class="nav-links">
+            <li class="nav-item active">
+                <span>📄 Mis Antecedentes</span>
+            </li>
+        </ul>
+
+        <div class="logout-link">
+            <a href="{% url 'login' %}">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        
+        <div class="card" style="border-left: 5px solid #28a745;">
+            <h2>Hola, {{ request.user.nombre }}</h2>
+            <p style="color:#666;">Bienvenido a tu portal tributario. Aquí está tu información actualizada.</p>
+        </div>
+
+        <div class="card">
+            <h2>Mis Calificaciones Vigentes</h2>
+            <table class="info">
+                <thead>
+                    <tr>
+                        <th>Emisor</th>
+                        <th>Año Tributario</th>
+                        <th>Fecha de Emisión</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in calificaciones %}
+                    <tr>
+                        <td>
+                            <strong>{{ c.id_emisor.nombre }}</strong><br>
+                            <small style="color:#888;">{{ c.id_emisor.rut }}</small>
+                        </td>
+                        <td>
+                            <span style="background:#e8f5e9; color:#2e7d32; padding:5px 10px; border-radius:15px; font-weight:bold; font-size:12px;">
+                                {{ c.año_tributario }}
+                            </span>
+                        </td>
+                        <td style="color:#555;">{{ c.fecha_creacion_registro|date:"d/m/Y" }}</td>
+                        <td><span class="status-active">Disponible</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align:center; padding:30px; color:#999;">
+                            No tienes calificaciones registradas en este momento.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</body>
+</html>

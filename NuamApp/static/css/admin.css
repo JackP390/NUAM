@@ -9,6 +9,44 @@ body {
     overflow: hidden; /* Evita doble scroll */
 }
 
+/* --- AGREGAR AL FINAL DE admin.css --- */
+
+/* Estilos para inputs y selectores (Clase .campo) */
+.campo, select, input[type="text"], input[type="number"], input[type="email"] {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    height: 40px; /* Altura fija para alinear botones e inputs */
+}
+
+.campo:focus, select:focus, input:focus {
+    outline: none;
+    border-color: #ff4403;
+    box-shadow: 0 0 0 2px rgba(255, 68, 3, 0.1);
+}
+
+/* Ajuste específico para que el botón "Asociar" se alinee con los inputs */
+#boton {
+    height: 40px; /* Misma altura que los inputs */
+    line-height: 20px; /* Centrado vertical del texto */
+    padding: 0 20px;
+    background-color: #ff4403;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#boton:hover {
+    background-color: #e03b00;
+}
 /* --- SIDEBAR (Barra Izquierda) --- */
 .sidebar {
     width: 260px;

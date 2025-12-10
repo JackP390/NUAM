@@ -1,3 +1,6 @@
+from django.core.mail import send_mail
+from django.conf import settings
+from django.utils.crypto import get_random_string
 from django.shortcuts import render, redirect, get_object_or_404 # redirect para enviar a otras páginas y get object para obtener objetos
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
@@ -47,6 +50,8 @@ def es_admin(user): # verificación de que el usuario es superuser/admin
 def redireccion_login(request):
     if request.user.is_superuser:
         return redirect('admin_dashboard')
+    elif request.user.rol == 'Cliente':
+        return redirect('client_view')
     else:
         return redirect('holder')
 
@@ -157,21 +162,76 @@ def create_client(request):
     if request.method == 'POST':
         form = FormCliente(request.POST)
         if form.is_valid():
-            cliente = form.save(commit=False) # Guarda el objeto cliente temporalmente
-
+            # 1. Guardar Cliente (Ficha de datos)
+            cliente = form.save(commit=False)
             cliente.corredor = request.user
-
             cliente.save()
+
+            # 2. Crear Usuario y Enviar Correo
+            rut_limpio = cliente.rut
+            try:
+                # Verificamos si ya existe el usuario
+                if not Corredor.objects.filter(rut=rut_limpio).exists():
+                    # Generar contraseña aleatoria
+                    password_provisoria = get_random_string(length=8)
+                    
+                    # Crear el usuario para loguearse
+                    Corredor.objects.create_user(
+                        email=cliente.email,
+                        nombre=cliente.nombre,
+                        rut=rut_limpio,
+                        password=password_provisoria,
+                        rol='Cliente'
+                    )
+
+                    # --- PREPARAR EL CORREO ---
+                    asunto = 'Bienvenido a NUAM - Credenciales de Acceso'
+                    mensaje = f"""
+                    Hola {cliente.nombre},
+
+                    Tu corredor {request.user.nombre} te ha registrado en la plataforma NUAM.
+                    
+                    Tus credenciales de acceso son:
+                    --------------------------------
+                    Usuario (Email): {cliente.email}
+                    Contraseña: {password_provisoria}
+                    --------------------------------
+
+                    Por favor ingresa en: http://127.0.0.1:8000/login/
+                    """
+                    
+                    # --- ENVIAR EL CORREO ---
+                    try:
+                        send_mail(
+                            asunto,
+                            mensaje,
+                            settings.EMAIL_HOST_USER,
+                            [cliente.email],
+                            fail_silently=False,
+                        )
+                        print("\n" + "="*30)
+                        print(f"CORREO ENVIADO A CONSOLA PARA: {cliente.email}")
+                        print("="*30 + "\n")
+                        messages.success(request, f"Cliente creado y correo enviado a {cliente.email}")
+                    except Exception as e:
+                        messages.warning(request, f"Cliente creado, pero falló el envío: {e}")
+                        messages.info(request, f"Clave generada: {password_provisoria}")
+
+                else:
+                    messages.warning(request, "El cliente se creó, pero ya tenía un usuario registrado.")
+
+            except Exception as e:
+                messages.error(request, f"Error en el proceso de usuario: {e}")
 
             return redirect('holder')
     else:
         form = FormCliente()
 
     context = {
-        'form':form,
-        'titulo':'Añadir Nuevo Cliente',
-        'action':reverse('create_client')
-        }
+        'form': form,
+        'titulo': 'Añadir Nuevo Cliente',
+        'action': reverse('create_client')
+    }
     return render(request, 'form_client.html', context)
 
 @login_required
@@ -238,3 +298,27 @@ def add_calificacion(request, cliente_id):
             messages.error(request, "Error al asociar calificación.")
 
     return redirect('client_detail', cliente_id=cliente_id)
+
+@login_required
+def client_view(request):
+    if request.user.rol != 'Cliente':
+        return redirect(redireccion_login)
+    
+    try:
+        ficha_cliente = Cliente.objects.filter(rut=request.user.rut).first()
+
+        if ficha_cliente:
+            calificaciones = []
+            messages.warning(request, "No se encontró tu ficha de cliente.")
+
+    except Exception as e:
+        ficha_cliente = None
+        calificaciones = []
+        messages.error(request, f"Error al cargar datos: {e}")
+
+    context = {
+        'cliente':ficha_cliente,
+        'calificaiones':calificaciones
+    }
+
+    return render(request, 'client_view.html', context)
