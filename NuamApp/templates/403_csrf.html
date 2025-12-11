@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sesión Expirada | NUAM</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="login-card" style="text-align: center;">
+        <img src="{% static 'images/Nuam_logo-transparente.png' %}" alt="Nuam Logo" id="logo">
+        <div id="linea" style="margin: 0 auto 20px auto;"></div>
+        
+        <h2 style="color: #d32f2f;">⚠️ Seguridad</h2>
+        
+        <p style="color: #666; font-size: 16px; margin: 20px;">
+            El formulario ha caducado por seguridad. Esto pasa si dejaste la página abierta mucho tiempo o usaste el botón "Atrás".
+        </p>
+
+        <a href="{% url 'login' %}" id="boton" style="display:block; width:80%; margin: 20px auto; text-decoration:none; line-height:20px;">
+            Recargar Página
+        </a>
+    </div>
+</body>
+</html>

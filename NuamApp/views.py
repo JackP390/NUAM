@@ -54,6 +54,10 @@ def redireccion_login(request):
         return redirect('client_view')
     else:
         return redirect('holder')
+    
+def csrf_failure(request, reason=""):
+    context = {'titulo': 'Sesión Expirada'}
+    return render(request, '403_csrf.html', context)
 
 @user_passes_test(es_admin)
 def carga_masiva_calificaciones(request):
@@ -181,7 +185,8 @@ def create_client(request):
                         nombre=cliente.nombre,
                         rut=rut_limpio,
                         password=password_provisoria,
-                        rol='Cliente'
+                        rol='Cliente',
+                        is_active=True
                     )
 
                     # --- PREPARAR EL CORREO ---
@@ -293,7 +298,7 @@ def add_calificacion(request, cliente_id):
             nueva_calif = form.save(commit=False)
             nueva_calif.id_cliente = cliente
             nueva_calif.save()
-            messages.succes(request, "Calificación asociada correctamente.")
+            messages.success(request, "Calificación asociada correctamente.")
         else:
             messages.error(request, "Error al asociar calificación.")
 
@@ -302,12 +307,14 @@ def add_calificacion(request, cliente_id):
 @login_required
 def client_view(request):
     if request.user.rol != 'Cliente':
-        return redirect(redireccion_login)
+        return redirect('redireccion_login')
     
     try:
         ficha_cliente = Cliente.objects.filter(rut=request.user.rut).first()
 
         if ficha_cliente:
+            calificaciones = Calificacion.objects.filter(id_cliente=ficha_cliente).order_by('-año_tributario')
+        else:
             calificaciones = []
             messages.warning(request, "No se encontró tu ficha de cliente.")
 
@@ -318,7 +325,7 @@ def client_view(request):
 
     context = {
         'cliente':ficha_cliente,
-        'calificaiones':calificaciones
+        'calificaciones':calificaciones
     }
 
     return render(request, 'client_view.html', context)

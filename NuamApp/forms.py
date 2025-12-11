@@ -84,7 +84,7 @@ class FormCalificacion(ModelForm):
     class Meta:
         model = Calificacion
         fields = ['id_emisor', 'año_tributario']
-        wigets = {
+        widgets = {
             'id_emisor' : forms.Select(attrs={'class':'campo'}),
             'año_tributario' : forms.NumberInput(attrs={'class':'campo','placeholder':'Año (Ej: 2025)'}),
         }
